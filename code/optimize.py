@@ -347,6 +347,32 @@ def compute_total_error_for_all_counties(candidate_strengths, candidate_position
     )
 
 
+## PRIOR CALCULATIONS
+
+# uses a log-normal distribution centered at 1 with stddev specified by user
+def prior_strength_log_normal(candidate_strengths, candidate_positions, county_positions, actual_votes):
+    return math.exp(-np.sum(np.log(candidate_strengths) ** 2 / ( 2 * config.prior_strength_stddev ** 2)))
+
+# uses a bivariate gaussian on the absolute locations of each x,y coordinate
+def prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_positions, county_positions, actual_votes):
+    distances = np.sqrt(np.sum(candidate_positions ** 2, axis=1))
+    return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
+
+# uses a bivariate guassian on the relative location of each x,y coordinate to the corresponding x,y mean (not Eucl. dist. from centroid)
+def prior_location_bivariate_gaussian_relative(candidate_strengths, candidate_positions, county_positions, actual_votes):
+    centroid = np.mean(candidate_positions, axis=0)
+    candidate_positions_relative = candidate_positions - centroid
+    distances = np.sqrt(np.sum(candidate_positions_relative ** 2, axis=1))
+    return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
+
+### we should just translate the candidates so that centroid = 0
+
+### TK:
+#def prior_county_location -- how far the counties are from the candidate centroid
+#def prior_county_smoothness -- how well-distributed the counties are (lattice rather than streams)
+
+
+
 ## INNER LOOP HELPER FUNCTIONS
 
 # place a single county at the min-error/max-posterior position (they are equivalent since we have no prior on position) for a given arrangement of candidates
@@ -404,12 +430,11 @@ def compute_posterior_probability(candidate_strengths, candidate_positions, coun
     likelihood = math.exp(-total_error/(2 * config.perturb_position_stddev ** 2))
 
     # Lognormal prior on strength, centered at 1.0
-    prior_strength = math.exp(-np.sum(np.log(candidate_strengths) ** 2 / ( 2 * config.prior_strength_stddev ** 2)))
+    prior_strength = prior_strength_log_normal(candidate_strengths, candidate_positions, county_positions, actual_votes)
 
     # Bivariate gaussian prior on location, centered at (0,0)
-    distances = np.sqrt(np.sum(candidate_positions ** 2, axis=1))
-    prior_location = math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
-
+    prior_location = prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_positions, county_positions, actual_votes)
+    
     # Compute prior (put alpha + beta here?)
     prior = prior_strength * prior_location
 
