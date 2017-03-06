@@ -42,7 +42,7 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
     if county_positions is None:
         county_positions = np.zeros((num_votes, config.dimensions), dtype=config.dtype)
 
-    # TODO: fix candidate positions under translation / rotation
+    
 
     # compute the posterior probability of our current solution (see helper functions below)
     prior_strength, prior_location, prior, likelihood, posterior = compute_posterior_probability(candidate_strengths, candidate_positions, county_positions, actual_votes)
@@ -359,17 +359,17 @@ def prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_po
     return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
 
 # uses a bivariate guassian on the relative location of each x,y coordinate to the corresponding x,y mean (not Eucl. dist. from centroid)
+# this is the same as above, if you use flag --fix-positions (centroid = 0,0)
 def prior_location_bivariate_gaussian_relative(candidate_strengths, candidate_positions, county_positions, actual_votes):
     centroid = np.mean(candidate_positions, axis=0)
     candidate_positions_relative = candidate_positions - centroid
     distances = np.sqrt(np.sum(candidate_positions_relative ** 2, axis=1))
     return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
 
-### we should just translate the candidates so that centroid = 0
+def prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes):
+    distances = np.sqrt(np.sum(county_positions ** 2, axis=1))
+    return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
 
-### TK:
-#def prior_county_location -- how far the counties are from the candidate centroid
-#def prior_county_smoothness -- how well-distributed the counties are (lattice rather than streams)
 
 
 
@@ -414,10 +414,29 @@ def perturb_candidate_positions(candidate_positions):
     num_candidates = candidate_positions.shape[0]
     candidate_positions += np.random.normal(0, config.perturb_position_stddev, size=(num_candidates, config.dimensions))
 
+    # fix canddiates under translation and rotation
     if config.fix_positions:
-        candidate_positions[0] = [0.0, 0.0] # northeast
-        candidate_positions[1][1] = 0.0 # northwest
+        candidate_positions = fix_under_translation(candidate_positions)
+        candidate_positions = fix_under_rotation(candidate_positions)
 
+    return candidate_positions
+
+# translate candidate positions so centroid = (0,0)
+def fix_under_translation(candidate_positions):
+    centroid = np.mean(candidate_positions, axis=0)
+    return candidate_positions - centroid
+
+# rotate candidate positions so K1K2 || x-axis
+def fix_under_rotation(candidate_positions, K1=0, K2=1, x=0, y=1):
+    K1x,K1y = candidate_positions[K1][x],candidate_positions[K1][y]
+    K2x,K2y = candidate_positions[K2][x],candidate_positions[K2][y]
+    angle_with_xaxis = np.arctan2(K2y-K1y,K2x-K1x)
+    cos,sin = np.cos(-angle_with_xaxis),np.sin(-angle_with_xaxis)
+    rotation_matrix = np.matrix([[cos,-sin],[sin,cos]])
+    
+    # rotate in x,y-plane so that K1K2 segment is parallel to x axis
+    candidate_positions = np.array([rotation_matrix.dot(old_pos).tolist()[0] for old_pos in candidate_positions])
+    
     return candidate_positions
 
 # calculate the posterior probability of an arrangement (e^-err * prod[strength_priors])
@@ -435,8 +454,11 @@ def compute_posterior_probability(candidate_strengths, candidate_positions, coun
     # Bivariate gaussian prior on location, centered at (0,0)
     prior_location = prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_positions, county_positions, actual_votes)
     
+    # Bivariate guassian prior on county location, centered at (0,0)
+    prior_county_location = prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes)
+    
     # Compute prior (put alpha + beta here?)
-    prior = prior_strength * prior_location
+    prior = prior_strength * prior_location * prior_county_location
 
     # Posterior probability
     posterior = prior * likelihood
