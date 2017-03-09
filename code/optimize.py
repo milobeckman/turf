@@ -335,8 +335,19 @@ def compute_error_components_for_single_county_leastsq_helper_version(county_pos
 
 # computes MSE for all candidates for a single county (this is "county prediction error" or TPE)
 def compute_total_error_for_single_county(candidate_strengths, candidate_positions, county_position, actual_vote):
-    errors = compute_error_components_for_single_county(candidate_strengths, candidate_positions, county_position, actual_vote)
-    return sum(errors * errors) / len(errors)
+    
+    error_mode = config.error_mode
+    
+    # straightforward mean squared error
+    if error_mode == "MSE":
+        errors = compute_error_components_for_single_county(candidate_strengths, candidate_positions, county_position, actual_vote)
+        return sum(errors * errors) / len(errors)
+    
+    # mean absolute percentage error, punishes 0.0 when correct answer is 0.1 more than 0.5 when correct answer is 0.6
+    if error_mode == "MAPE":
+        predicted_vote = predict_vote_for_single_county(candidate_strengths, candidate_positions, county_position)
+        abs_pct_errors = [abs((predicted_vote[i] - actual_vote[i]) / actual_vote[i]) for i in range(len(actual_vote))]
+        return sum(abs_pct_errors)
 
 # computes total MSE for all counties and candidates (this is "electorate prediction error" or EPE; this is what we want to minimize)
 def compute_total_error_for_all_counties(candidate_strengths, candidate_positions, county_positions, actual_votes):
@@ -369,6 +380,28 @@ def prior_location_bivariate_gaussian_relative(candidate_strengths, candidate_po
 def prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes):
     distances = np.sqrt(np.sum(county_positions ** 2, axis=1))
     return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
+
+# checks how many counties are nearest each candidate, "should" be 1/n each
+def prior_county_spread(candidate_strengths, candidate_positions, county_positions, actual_votes):
+    
+    # count of how many counties are nearest candidate i
+    neighborhood_populations = [0]*len(candidate_positions)
+    
+    for county_position in county_positions:
+        distances = [distance(county_position, candidate_position) for candidate_position in candidate_positions]
+        nearest = distances.index(min(distances))
+        neighborhood_populations[nearest] += 1
+    
+    
+    print(neighborhood_populations)
+    
+    # right now i'm just using a bivariate gaussian on a pretty arbitrary manipulation of this value -- this is probably dumb
+    
+    # "deviations" is how different the true county spread is from [1/n, 1/n, ..., 1/n]
+    deviations = np.array([abs(x/len(county_positions) - 1/len(candidate_positions)) for x in neighborhood_populations])
+    prior = math.exp(-np.sum(deviations**2 / (2 * config.prior_county_spread_stddev ** 2)))
+    
+    return prior
 
 
 
@@ -457,8 +490,11 @@ def compute_posterior_probability(candidate_strengths, candidate_positions, coun
     # Bivariate guassian prior on county location, centered at (0,0)
     prior_county_location = prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes)
     
+    # [NEEDS WORK] Prior on county spread
+    prior_spread = prior_county_spread(candidate_strengths, candidate_positions, county_positions, actual_votes)
+    
     # Compute prior (put alpha + beta here?)
-    prior = prior_strength * prior_location * prior_county_location
+    prior = prior_strength * prior_location * prior_county_location * prior_spread
 
     # Posterior probability
     posterior = prior * likelihood

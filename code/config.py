@@ -39,6 +39,9 @@ def parse_args():
     # theoretically this all works for any dimension of ideology space, though we're sticking to R2 so far
     parser.add_argument("--dimensions", type=int, default=2, help="How many dimensions to make the space we're locating candidates and voters in")
 
+    # adjust the way TURF calculates TPE
+    parser.add_argument("--MAPE", dest="error_mode", action='store_const', const="MAPE", default="MSE", help="Use mean absolute percentage error to punish near-zero errors")
+
     # two hacky flags for improving results of scipy implementations in certain cases (see 02.implementation, S3.4)
     parser.add_argument("--fix-strength", action="store_true", default=False, help="Fix all candidate strengths to 1.")
     parser.add_argument("--fix-positions", action="store_true", default=False, help="Fix one candidate at the origin and another at y = 0.")
@@ -53,7 +56,7 @@ def parse_args():
     parser.add_argument("--prior-strength-loc", type=float, default=0, help="Loc (mean - 1) of the lognormal prior probability distribution for candidates' strength.")
     parser.add_argument("--prior-strength-stddev", type=float, default=0.25, help="Standard deviation of the lognormal prior probability distribution for candidates' strength.")
     parser.add_argument("--prior-location-stddev", type=float, default=4.0, help="Standard deviation of the bivariate prior probability distribution for candidates' postitions.")
-
+    parser.add_argument("--prior-county-spread-stddev", type=float, default=0.25, help="Standard deviation of the bivariate prior probability distribution for the spread of counties amongst the neighborhoods of each candidate.")
 
     # candidate/county arrangement visualizations
     parser.add_argument("--plot-all-counties", type=str, help="File in which to plot all candidates and counties.")
