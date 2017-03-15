@@ -38,13 +38,27 @@ def read_solution(filename):
   
 
 # write probabilities to filename
-def write_probabilities(filename, prior_strength, prior_location, prior, likelihood, posterior, step_no=-1):
+def write_probabilities(filename, prior_vector, probability_vector, step_no):
+
+    prior_strength, prior_candidate_location, prior_county_location, prior_spread = prior_vector
+    prior, likelihood, posterior = probability_vector
+
     filename = filename.replace('.txt','_probabilities.txt')
     if os.path.exists(filename) == False:
-        header = ['step_no','prior_s','prior_xy','prior','likelihood','posterior']
+        header = [  'step_no','posterior','likelihood','prior',
+                    'prior_s','prior_candidate_xy','prior_county_xy','prior_spread' ] 
+
         open(filename, "a+").write('\t'.join(header)+'\n')
 
-    line = '\t'.join([str(x) for x in [step_no, prior_strength, prior_location, prior, likelihood, posterior]])
+    line = '\t'.join([str(x) for x in [ step_no,
+                                        posterior,
+                                        likelihood,
+                                        prior,
+                                        prior_strength,
+                                        prior_candidate_location,
+                                        prior_county_location,
+                                        prior_spread]])
+
     open(filename, "a+").write(line+'\n')
 
 
@@ -64,7 +78,6 @@ def write_positions(filename, candidate_positions, candidate_strengths, county_p
         open(filename, "a+").write('\t'.join(header)+'\n')
 
     candidate_line = '\t'.join(['\t'.join([str(x) for x in pos]) for pos in candidate_positions])
-    # print candidate_strengths
     strength_line = '\t'.join([str(x) for x in candidate_strengths])
     county_line = '\t'.join(['\t'.join([str(x) for x in pos]) for pos in county_positions])
 

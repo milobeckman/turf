@@ -141,16 +141,21 @@ def plot_probabilities(filename):
     filename = filename.replace('.txt','_probabilities.txt')
     figname = filename.replace('.txt','_probabilities.pdf')
     df = pd.read_table(filename)
+    nsteps = len(df)
+    magnitude = int(np.log10(nsteps))
+    nint = int(np.max([1, 10**(magnitude - 2)]))
 
     fig = plt.figure(figsize=(25,10))
 
     n = 0
-    ix = {'Posteriors':[3,4,5],'Priors':[1,2,3]}
+    # ix = {'Posteriors':[3,4,5],'Priors':[1,2,3]}
+    ix = {'Probabilities':[1,2,3],'Priors':[3,4,5,6,7]}
     for grp in ix.keys():
         n += 1
         ax = fig.add_subplot(2,1,n)
         for prob in df.columns.values[ix[grp]]:
-            plt.plot(df['step_no'],df[prob],label=prob)
+            x, y = zip(*[ (df['step_no'][k], df[prob][k]) for k in range(0,nsteps,nint) ])
+            plt.plot(x, y, label=prob, linewidth=2.0, alpha=0.5)
 
         plt.title(grp,fontsize=20)
         plt.legend()
@@ -160,12 +165,21 @@ def plot_probabilities(filename):
     fig.savefig(figname, transparent=True, dpi=300, bbox_inches='tight')
 
 
-def plot_positions(filename,bin_width=100):
+def plot_positions(filename):
 
     filename = filename.replace('.txt','_positions.txt')
     figname = filename.replace('.txt','_positions.pdf')
 
     df = pd.read_table(filename)
+    nsteps = len(df)
+    magnitude = int(np.log10(nsteps))
+
+    nbins = 10 if magnitude < 4 else 100
+    nint = int(np.max([1, 10**(magnitude - 2)]))
+
+    print "n bins =",nbins
+    print "n int =",nint
+
     candidates = list(set([ x.split('_')[0] for x in df.columns.values if x[0] != 'T' ]))
 
     xmin = df[[ K+'_x' for K in candidates ]].min().min()*1.1
@@ -197,9 +211,7 @@ def plot_positions(filename,bin_width=100):
         ax4 = plt.subplot(gs0[3]) # Y distribution  
         
         ## X histogram
-        n, bins, patches = ax1.hist(x,bin_width,
-                                     histtype='step',
-                                     color='black')
+        n, bins, patches = ax1.hist(x, nbins, histtype='step', color='black')
         ax1.axis([xmin,xmax,0.0,1.1*max(n)])
         ax1.plot([np.mean(x),np.mean(x)],[0.0,1.1*max(n)],'r-',linewidth=5.0,alpha=0.5)
         ax1.plot([np.median(x),np.median(x)],[0.0,1.1*max(n)],'b-',linewidth=5.0,alpha=0.5)
@@ -211,20 +223,18 @@ def plot_positions(filename,bin_width=100):
         ax2.axis('off')
         
         ## MCMC
-        ax3.plot(df[K+'_x'],df[K+'_y'],
-                 linewidth=0.5,
-                 alpha=0.5,
-                 color='black')
+        x_, y_ = zip(*[ (df[K+'_x'][k], df[K+'_y'][k]) for k in range(0,nsteps,nint) ])
+
+        ax3.plot(x_, y_, linewidth=0.5, alpha=0.5, color='black')
+        ax3.plot(np.mean(x),np.mean(y),'r.',markersize=40,alpha=0.5)
+        ax3.plot(np.median(x),np.median(y),'b.',markersize=40,alpha=0.5)
         ax3.axis([xmin,xmax,ymin,ymax])
         ax3.tick_params(labelsize=25)
         ax3.set_xlabel(r'$X$',fontsize=40)
         ax3.set_ylabel(r'$Y$',fontsize=40,rotation=0,labelpad=20)
         
         ## Y distribution
-        n, bins, patches = ax4.hist(y,bin_width,
-                                     orientation='horizontal',
-                                     histtype='step',
-                                     color='black')
+        n, bins, patches = ax4.hist(y, nbins, orientation='horizontal', histtype='step', color='black')
         ax4.axis([0.0,1.1*max(n),ymin,ymax])
         ax4.plot([0.0,1.1*max(n)],[np.mean(y),np.mean(y)],'r-',linewidth=5.0,alpha=0.5)
         ax4.plot([0.0,1.1*max(n)],[np.median(y),np.median(y)],'b-',linewidth=5.0,alpha=0.5)
@@ -235,9 +245,7 @@ def plot_positions(filename,bin_width=100):
         
         ## Strength distribution
         ax5 = plt.subplot(gs1[0])
-        n, bins, patches = ax5.hist(s,bin_width,
-                                    histtype='step',
-                                   color='black')
+        n, bins, patches = ax5.hist(s, nbins, histtype='step', color='black')
         ax5.axis([0.0,3.0,0.0,1.1*max(n)])
         ax5.plot([np.mean(s),np.mean(s)],[0.0,1.1*max(n)],'r-',linewidth=5.0,alpha=0.5)
         ax5.plot([np.median(s),np.median(s)],[0.0,1.1*max(n)],'b-',linewidth=5.0,alpha=0.5)

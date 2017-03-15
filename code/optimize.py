@@ -42,12 +42,11 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
     if county_positions is None:
         county_positions = np.zeros((num_votes, config.dimensions), dtype=config.dtype)
 
-    
-
     # compute the posterior probability of our current solution (see helper functions below)
-    prior_strength, prior_location, prior, likelihood, posterior = compute_posterior_probability(candidate_strengths, candidate_positions, county_positions, actual_votes)
+    prior_vector, probability_vector = compute_posterior_probability(candidate_strengths, candidate_positions, county_positions, actual_votes)
 
-    print("Initial posterior:", posterior)
+    prior_strength, prior_candidate_location, prior_county_location, prior_spread = prior_vector
+    prior, likelihood, posterior = probability_vector
 
     # save initial arrangement as current best
     best_candidate_positions = candidate_positions.copy()
@@ -55,6 +54,7 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
     best_county_positions = county_positions.copy()
     best_posterior = posterior
 
+    print("Initial posterior:", posterior)
 
     # iteratively perturb candidates (outer loop) and optimize counties (inner loop), accept perturbation according to metropolis-hastings
     try:
@@ -73,8 +73,11 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
             
             # optimize counties (inner loop)
             new_county_positions = find_minimal_error_positions_for_all_counties(new_candidate_strengths, new_candidate_positions, county_positions, actual_votes)
-            new_prior_strength, new_prior_location, new_prior, new_likelihood, new_posterior = compute_posterior_probability(new_candidate_strengths, new_candidate_positions, new_county_positions, actual_votes)
+            prior_vector, probability_vector = compute_posterior_probability(new_candidate_strengths, new_candidate_positions, new_county_positions, actual_votes)
             
+            prior_strength, prior_candidate_location, prior_county_location, prior_spread = prior_vector
+            new_prior, new_likelihood, new_posterior = probability_vector
+
             # save this arrangement if it's our new best
             if new_posterior > best_posterior:
 
@@ -105,15 +108,16 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
                 candidate_positions = new_candidate_positions
                 candidate_strengths = new_candidate_strengths
                 county_positions = new_county_positions
-                prior_strength = new_prior_strength
-                prior_location = new_prior_location
+                # prior_strength = new_prior_strength
+                # prior_location = new_prior_location
                 prior = new_prior
                 likelihood = new_likelihood
                 posterior = new_posterior
 
                 if config.write_every_step and step_no > config.num_burn:
-                    solution_io.write_positions(config.solution_file, candidate_positions, candidate_strengths, county_positions, step_no)
-                    solution_io.write_probabilities(config.solution_file, prior_strength, prior_location, prior, likelihood, posterior, step_no)
+                    solution_io.write_positions( config.solution_file, candidate_positions, candidate_strengths, county_positions, step_no )
+                    solution_io.write_probabilities( config.solution_file, prior_vector, probability_vector, step_no )
+
             else:
                 # print('\n',posterior_probability, 'vs', new_posterior_probability)
                 # print(randval, ratio) 
@@ -375,11 +379,11 @@ def prior_location_bivariate_gaussian_relative(candidate_strengths, candidate_po
     centroid = np.mean(candidate_positions, axis=0)
     candidate_positions_relative = candidate_positions - centroid
     distances = np.sqrt(np.sum(candidate_positions_relative ** 2, axis=1))
-    return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
+    return math.exp(-np.mean(distances / (2 * config.prior_location_stddev ** 2)))
 
 def prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes):
     distances = np.sqrt(np.sum(county_positions ** 2, axis=1))
-    return math.exp(-np.sum(distances / (2 * config.prior_location_stddev ** 2)))
+    return math.exp(-np.mean(distances / (2 * config.prior_location_stddev ** 2)))
 
 # checks how many counties are nearest each candidate, "should" be 1/n each
 def prior_county_spread(candidate_strengths, candidate_positions, county_positions, actual_votes):
@@ -393,7 +397,7 @@ def prior_county_spread(candidate_strengths, candidate_positions, county_positio
         neighborhood_populations[nearest] += 1
     
     
-    print(neighborhood_populations)
+    # print(neighborhood_populations)
     
     # right now i'm just using a bivariate gaussian on a pretty arbitrary manipulation of this value -- this is probably dumb
     
@@ -485,7 +489,7 @@ def compute_posterior_probability(candidate_strengths, candidate_positions, coun
     prior_strength = prior_strength_log_normal(candidate_strengths, candidate_positions, county_positions, actual_votes)
 
     # Bivariate gaussian prior on location, centered at (0,0)
-    prior_location = prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_positions, county_positions, actual_votes)
+    prior_candidate_location = prior_location_bivariate_gaussian_absolute(candidate_strengths, candidate_positions, county_positions, actual_votes)
     
     # Bivariate guassian prior on county location, centered at (0,0)
     prior_county_location = prior_county_location_bivariate_gaussian(candidate_strengths, candidate_positions, county_positions, actual_votes)
@@ -494,12 +498,18 @@ def compute_posterior_probability(candidate_strengths, candidate_positions, coun
     prior_spread = prior_county_spread(candidate_strengths, candidate_positions, county_positions, actual_votes)
     
     # Compute prior (put alpha + beta here?)
-    prior = prior_strength * prior_location * prior_county_location * prior_spread
+    # prior = prior_strength * prior_candidate_location * prior_county_location * prior_spread
+
+    prior = ( prior_strength * prior_candidate_location * prior_county_location * prior_spread ) ** (1/4)
 
     # Posterior probability
     posterior = prior * likelihood
 
-    return prior_strength, prior_location, prior, likelihood, posterior
+    prior_vector = [ prior_strength, prior_candidate_location, prior_county_location, prior_spread ]
+
+    probability_vector = [ prior, likelihood, posterior ]
+
+    return prior_vector, probability_vector
 
 # stochastically decides whether to take next step using metropolis-hastings criterion
 def step_probability_from_posteriors(old_posterior, new_posterior):
