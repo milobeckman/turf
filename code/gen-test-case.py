@@ -60,9 +60,9 @@ def read_candidates_from_file(filename):
     # the file looks like this:
     '''
 sw	1	-1	-1
-ne	1	1	-1
+se	1	1	-1
 nw	1	-1	1
-NE!	3	1	1   
+NE!	2	1	1   
     '''
     # the first column is names, the second column is strengths, the rest is (x,y) posns
     
