@@ -1,5 +1,4 @@
-import subprocess, shlex
-import time
+import subprocess, shlex, os
 
 
 def main():
@@ -22,39 +21,50 @@ def main():
     choices["prior-location-stddev"] = [1.0,2.0,5.0]
     choices["prior-county-spread-stddev"] = [0.025,0.25,2.5]
     
-    # prepare the recursive call to grid_search
+    # prepare the recursive call to list_of_run_commands and generate list
     run_command_so_far = "python main.py -d " + data_file + " -s " + solution_file + " -n " + str(num_iter) + " --plot-all-counties " + viz_file + " --" + method
     identifier_so_far = ""
+    command_list = list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far)
     
-    # call it
-    grid_search(hyperparameters, choices, run_command_so_far, identifier_so_far)
-    
+    # run commands in parallel
+    run_in_parallel(command_list, 5)
+  
 
-# recursive function -- for each hyperparameter, calls 3 instances of grid_search (one for each h.p. choice) on the remaining hyperparameters
-def grid_search(hyperparameters, choices, run_command_so_far, identifier_so_far):
+
+# recursively generates a list of all combinations of hyperparameters
+def list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far):
     
     # base case: sub in the identifier and run
     if len(hyperparameters) == 0:
-        args = shlex.split(run_command_so_far.replace("%I", identifier_so_far))
-        #print(args)
-        
-        try:
-            p = subprocess.Popen(args)
-        except KeyboardInterrupt:
-            # this doesn't do anything
-            print("INTERRUPTED")
-        
-        return
+        run_command = run_command_so_far.replace("%I", identifier_so_far)
+        return [run_command]
     
     # choose the hyperparameter to iterate over
     my_hp = hyperparameters[0]
     identifier_index = 0
     run_command_so_far += " --" + my_hp + " "
     
+    command_list = []
+    
     # call grid_search for each choice of hyperparameter
     for choice in choices[my_hp]:
-        grid_search(hyperparameters[1:], choices, run_command_so_far + str(choice), identifier_so_far + str(identifier_index))
+        command_list += list_of_run_commands(hyperparameters[1:], choices, run_command_so_far + str(choice), identifier_so_far + str(identifier_index))
         identifier_index += 1
+
+    return command_list
+
+
+# run the list of commands in parallel, no more than max_processes at a time
+def run_in_parallel(command_list, max_processes):
+    
+    processes = set()
+    
+    for command in command_list:
+        processes.add(subprocess.Popen(shlex.split(command)))
+        if len(processes) >= max_processes:
+            os.wait()
+            processes.difference_update([p for p in processes if p.poll() is not None])
+    
 
 
 if __name__ == '__main__':
