@@ -1,0 +1,780 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"scree",
+				"screen_height"
+			],
+			[
+				"remove",
+				"remove_modals"
+			],
+			[
+				"de",
+				"dendro_data"
+			],
+			[
+				"clust",
+				"clust_json"
+			],
+			[
+				"select",
+				"selectAll"
+			],
+			[
+				"attr",
+				"attributes"
+			],
+			[
+				"data",
+				"dataset"
+			],
+			[
+				"custom-",
+				"custom-color"
+			],
+			[
+				"mema",
+				"mema_tensor"
+			],
+			[
+				"meta",
+				"meta_path"
+			],
+			[
+				"sum",
+				"sum_params"
+			],
+			[
+				"col",
+				"columns_variance"
+			],
+			[
+				"dail",
+				"daily_data"
+			],
+			[
+				"hou",
+				"hourly_data"
+			],
+			[
+				"hour",
+				"hourly_params"
+			],
+			[
+				"hourly_",
+				"hourly_data"
+			],
+			[
+				"star",
+				"start_date"
+			],
+			[
+				"sample",
+				"sample_json"
+			],
+			[
+				"api",
+				"api_key"
+			],
+			[
+				"start",
+				"start"
+			],
+			[
+				"get",
+				"get_url"
+			],
+			[
+				"end",
+				"end_date"
+			],
+			[
+				"en",
+				"end_date"
+			],
+			[
+				"st",
+				"start_date"
+			],
+			[
+				"loc",
+				"location"
+			],
+			[
+				"city",
+				"city2code"
+			],
+			[
+				"json",
+				"json_file"
+			],
+			[
+				"scorad_",
+				"scorad_28"
+			],
+			[
+				"scor",
+				"scorad_0"
+			],
+			[
+				"x",
+				"xml_data"
+			],
+			[
+				"sco",
+				"score_fields"
+			],
+			[
+				"mea",
+				"meta_fields"
+			],
+			[
+				"pre",
+				"pre_data"
+			],
+			[
+				"min",
+				"min_pca"
+			],
+			[
+				"hist_",
+				"hist_cols"
+			],
+			[
+				"inde",
+				"index_col"
+			],
+			[
+				"fra",
+				"frames_fold"
+			],
+			[
+				"met",
+				"meta_cols"
+			],
+			[
+				"in",
+				"indv"
+			],
+			[
+				"drop",
+				"drop_cols"
+			],
+			[
+				"con",
+				"consensus_genes"
+			],
+			[
+				"gene",
+				"genelists"
+			],
+			[
+				"df",
+				"df_stat5"
+			],
+			[
+				"fc",
+				"fc_mat"
+			],
+			[
+				"cd",
+				"cd"
+			],
+			[
+				"dn",
+				"dn_terms"
+			],
+			[
+				"up",
+				"up_terms"
+			],
+			[
+				"row",
+				"row_id"
+			],
+			[
+				"col_",
+				"col_id"
+			],
+			[
+				"sig",
+				"signatures"
+			],
+			[
+				"out",
+				"output_json"
+			],
+			[
+				"flatt",
+				"flattened"
+			],
+			[
+				"roll",
+				"roll_canvas"
+			],
+			[
+				"j",
+				"json2table"
+			],
+			[
+				"v",
+				"v_shift"
+			],
+			[
+				"h",
+				"h_shift"
+			],
+			[
+				"margin",
+				"margin-right"
+			],
+			[
+				"image",
+				"image_ids"
+			],
+			[
+				"ti",
+				"TISSUE"
+			],
+			[
+				"split",
+				"splitlines"
+			],
+			[
+				"cell",
+				"cell_df"
+			],
+			[
+				"n",
+				"nfeats"
+			],
+			[
+				"ran",
+				"ranked_list"
+			],
+			[
+				"impor",
+				"importances"
+			],
+			[
+				"res",
+				"results"
+			],
+			[
+				"find_element",
+				"find_element_by_xpath"
+			],
+			[
+				"ele",
+				"element_text"
+			],
+			[
+				"find_element_",
+				"find_element_by_class_name"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.py",
+			"settings":
+			{
+				"buffer_size": 5672,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "optimize.py",
+			"settings":
+			{
+				"buffer_size": 30875,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config.py",
+			"settings":
+			{
+				"buffer_size": 11045,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "package",
+		"selected_items":
+		[
+			[
+				"package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/anders/Documents/turf/code"
+	],
+	"file_history":
+	[
+		"/Users/anders/Documents/MEMAboard/MEMAboard/clustergrammer_viz/clustergrammer.js",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/embedding-projector-standalone/clustergrammer.js",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/embedding-projector-standalone/index.html",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/.gitignore",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/clustergrammer_viz/index.html",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/oss_demo_bin.js",
+		"/Users/anders/Documents/MEMAboard/MEMAboard/index.html",
+		"/Users/anders/Documents/memaboard/mema_tensor_pca.py",
+		"/Users/anders/Documents/memaboard/mema_flask.py",
+		"/Users/anders/Documents/MEP-analysis/mema_tensor_pca.py",
+		"/Users/anders/Downloads/demo_gridspec04.py",
+		"/Users/anders/Documents/vitae-study/diane_data/collate_vitae_demographics.py",
+		"/Users/anders/Documents/vitae-study/diane_data/retrieve_weather_data.py",
+		"/Users/anders/Documents/vitae-study/delta_vitae.py",
+		"/Users/anders/Documents/vitae-study/log_vitae.py",
+		"/Users/anders/Documents/TKI-FDA/find_significant_ids.py",
+		"/Users/anders/Documents/GATA1-Analysis/.gitignore",
+		"/Users/anders/Documents/GATA1-Analysis/plot_STAT5_genes.py",
+		"/Users/anders/Documents/KinomeScan/gctx2gct.py",
+		"/Users/anders/Documents/GATA1-Analysis/make_enrichment_bargraph.py",
+		"/Users/anders/Documents/GATA1-Analysis/gata1_immune_signature.py",
+		"/Users/anders/Documents/KinomeScan/transpose_ks.py",
+		"/Users/anders/Documents/KinomeScan/transpose_hms2.py",
+		"/Users/anders/Documents/mepmosaic/app/static/css/style.css",
+		"/Users/anders/Documents/mepmosaic/app/static/js/visualizer.js",
+		"/Users/anders/Documents/mepmosaic/app/templates/index.html",
+		"/Users/anders/Documents/MEPmosaic/static/js/modal.js",
+		"/Users/anders/Documents/DToxS/Transcriptomics/create_vector_corrmat.py",
+		"/Users/anders/Documents/TKI-FDA/SMILES_2_ECFP.py",
+		"/Users/anders/Documents/TKI-FDA/relabel_GO_terms.py",
+		"/Users/anders/Documents/TKI-FDA/rank_enrichment_terms.py",
+		"/Users/anders/Documents/TKI-FDA/classify.py",
+		"/Users/anders/Documents/GATA1-microarray/gat_chdir.py",
+		"/Users/anders/Documents/DToxS/dtoxs_selenium.py",
+		"/Users/anders/Documents/N2C Script Package/Network2Canvas/Network2Canvas.py",
+		"/Users/anders/Documents/text_sublime.py",
+		"/Users/anders/Documents/LDR/NeuroLINCS/Transcription RNA-seq/NL_genes_sym.txt"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"",
+			"mema_tensor_pca.py",
+			"",
+			"pct"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"...\"",
+			"function In(",
+			"then fun",
+			"projectPCA",
+			"In(\"Initi",
+			"In(\"",
+			"console.log(",
+			"Ko",
+			"parseMetadata",
+			" In(\"",
+			"this.projections.has(\"pca-0\")",
+			" In(\"",
+			"Promise",
+			"primise",
+			" In(\"",
+			"In(\"Load",
+			"In(\"",
+			"projectPCA",
+			"loadClust",
+			" In(\"",
+			"In(\"",
+			"LoadClust",
+			"In(\"",
+			"function In",
+			"In(\"",
+			"In(",
+			"console.log",
+			"In(\"",
+			"Initializing",
+			"vo",
+			" In(",
+			"In(null",
+			"loadClust",
+			"Parsing metadata...",
+			"notify-msg",
+			"metadata",
+			"notify-msg-metadata",
+			"notify-msg-tensor",
+			"qn.setModalMessage",
+			"loadcluster",
+			" wn(",
+			"wn(",
+			"wn()",
+			" wn()",
+			"notification-dialog",
+			"wn",
+			"notification-dialog",
+			"showpca",
+			"notification-dialog",
+			"notification-panel",
+			"notification",
+			"wn",
+			"notification-dialog",
+			"projectPCA",
+			"computing pca",
+			"z-index",
+			"resize",
+			"resize_viz",
+			"spillover",
+			"scatter",
+			"min ",
+			"1039",
+			"clustergram",
+			"resize",
+			"make_modals",
+			"\"remove\"",
+			"dendro_callback",
+			"modal",
+			"stage",
+			"notifyresize",
+			"notifyResize",
+			".remove()",
+			"clustergram-",
+			"screen",
+			"resize",
+			".remove();",
+			"\"notifyResize ",
+			"notifyResize",
+			"resize",
+			"_boundNotifyResize",
+			"resize",
+			"_fireResize",
+			"notifyResize",
+			"resize",
+			"onResize",
+			"resize",
+			"canvas",
+			"resize",
+			"stage",
+			"clustergram-container",
+			"changed",
+			"datachange",
+			"_dataProtoChanged",
+			"tensor",
+			"loadCluster",
+			"oss_test",
+			"oss_data",
+			"\"dblclick\"",
+			"doubleclick",
+			"selectedtensor",
+			"tensor",
+			"resize",
+			"selectedtensor",
+			"_selectedTensorChanged",
+			"selectedtensor",
+			"tensor",
+			"\"click\"",
+			"paper-input-container",
+			"paper-input-container-2",
+			"selectedtensor",
+			"stage",
+			"scatter",
+			"projector.DataSet",
+			"DataPanel",
+			"load cl",
+			"selectedTensor",
+			"DataPanel",
+			"load clu",
+			"inspectorPanel",
+			"Sq",
+			"getCurrentState",
+			"setProjection",
+			"get",
+			"getEmbeddingInfoByName",
+			"get",
+			"DataPanelPolymer",
+			"ProjectionsPanelPolymer",
+			"showcluster"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"'",
+			"\"",
+			"mean",
+			"median",
+			"score_",
+			"min_pcr",
+			"pcr_data",
+			"pct",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "/Users/anders/Documents/turf/code"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5672,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								224,
+								224
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "optimize.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 30875,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								27233,
+								27233
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7343.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "config.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11045,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5350,
+								5350
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 112.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 25.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"indx",
+				"clustergrammer_viz/index.html"
+			],
+			[
+				"",
+				".gitignore"
+			],
+			[
+				"load",
+				"clustergrammer_viz/js/load_clustergram.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 87.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 244.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -9,6 +9,9 @@ config = argparse.Namespace()
 
 def parse_args():
     parser = argparse.ArgumentParser("Find the optimal arrangement of candidates and counties given a set of real-world data.")
+
+    # Set random seed to none unless otherwise specified
+    parser.add_argument("--set-seed", dest="seed", type=int, default=None, help="Initialize the internal state of the random number generator.")
     
     # four implementations we've tried so far (none work as desired)
     parser.add_argument("--mcmc-error-min", dest="method", action='store_const', const="mcmc_error_min", help="Use old MCMC implementation (essentially a stochastic gradiant descent).")
@@ -28,7 +31,7 @@ def parse_args():
     parser.add_argument("--write-every-step", action="store_true", default=False, help="Write a file every time we take a new step.")
 
     # run specifications
-    parser.add_argument("--num-burn", "-b", type=int, default=0, help="How many iterations to burn in before recording new steps.")
+    parser.add_argument("--num-burn", "-b", type=int, default=0, help="How many iterations to burn before recording steps.")
     parser.add_argument("--num-iterations", "-n", type=int, default=0, help="How many iterations to run the outer loop.")
     parser.add_argument("--num-counties", "-v", type=int, help="If specified, use this many counties instead of all of them.")
     parser.add_argument("--candidate", "-c", dest="candidates", type=int, nargs='*', help="If specified, use these candidate indices instead of all of them.")

@@ -4,13 +4,13 @@
 
 from __future__ import division
 import numpy as np
+import random
 
 from config import *
 import solution_io
 import parse
 import optimize
 import visualize
-
 
 # read command line arguments and run the appropriate optimization
 def main():
@@ -21,6 +21,10 @@ def main():
     for k, v in sorted(vars(config).items()):
         if k is not "rand_order_of_counties":
             print(k, "=", repr(v))
+
+    # Set seed, if specified
+    if config.seed is not None:
+        random.seed(config.seed)
 
     # parse the data file
     election = parse.get_election_from_data(config.data_file)

@@ -576,4 +576,3 @@ def produce_log_local_minimum_lambda(num_candidates, actual_votes, old_county_po
         
         solution_io.write_solution("basinhopping-%09.6f.json" % computed_error, candidate_positions, candidate_strengths, county_positions, computed_error)
 
-
