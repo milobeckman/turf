@@ -139,8 +139,13 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
     print("Accepted "+str(100*steps_taken/float(steps_attempted))[:5]+"% of steps.")
 
     print(steps_taken,"steps taken out of",steps_attempted,"steps attempted")
-
-    return best_candidate_strengths, best_candidate_positions, best_county_positions, best_posterior, step_no
+    
+    # use the flag --save-latest when doing real MCMC stuff
+    if config.save_latest:
+        return candidate_strengths, candidate_positions, county_positions, posterior, step_no
+    else:
+        # this is weird because we're saving the most recent step no, and then restarting from the best (which has a diff step no)
+        return best_candidate_strengths, best_candidate_positions, best_county_positions, best_posterior, step_no
 
 # IMPLEMENTATION 2: MCMC Error Min (see 02.implementation, S2.2)
 def optimize_mcmc_error_min(actual_votes, candidate_strengths=None, candidate_positions=None, county_positions=None, step_no=0, candidates=None, counties=None):

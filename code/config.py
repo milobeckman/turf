@@ -27,6 +27,7 @@ def parse_args():
     parser.add_argument("--solution-file", "-s", type=str, help="Where to read and write the best known solution.")
     parser.add_argument("--no-read-solution", dest="read_solution", action="store_false", default=True, help="Ignore the current best file ient and start with a random state.")
     parser.add_argument("--no-write-solution", dest="write_solution", action="store_false", default=True, help="Don't write a new best file.")
+    parser.add_argument("--save-latest", dest="save_latest", action="store_true", default=False, help="Save the most recent step, rather than the best.")
     parser.add_argument("--write-every-best-solution", action="store_true", default=False, help="Write a file every time we find a new best.")
     parser.add_argument("--write-every-step", action="store_true", default=False, help="Write a file every time we take a new step.")
 
