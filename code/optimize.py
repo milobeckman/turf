@@ -136,7 +136,11 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
         print("Aborting optimization due to keyboard interrupt and returning current best")
         pass
 
-    print("Accepted "+str(100*steps_taken/float(steps_attempted))[:5]+"% of steps.")
+    try:
+        print("Accepted "+str(100*steps_taken/float(steps_attempted))[:5]+"% of steps.")
+    except ZeroDivisionError as e:
+        print("This solution file has already completed the requested number of steps! Please create a new file or delete the old one.")
+        pass
 
     print(steps_taken,"steps taken out of",steps_attempted,"steps attempted")
     
