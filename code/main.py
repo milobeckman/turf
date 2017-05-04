@@ -62,7 +62,11 @@ def main():
 
     # read from solution file unless --no-read-solution is specified
     if config.read_solution:
-        candidate_positions, candidate_strengths, county_positions, total_error, step_no = solution_io.read_solution(config.solution_file)
+        if config.use_latest:
+            candidate_positions, candidate_strengths, county_positions, total_error, step_no = solution_io.read_latest_positions(config.solution_file)
+        else:
+            candidate_positions, candidate_strengths, county_positions, total_error, step_no = solution_io.read_solution(config.solution_file)
+
     if candidate_strengths is not None:
         assert candidate_strengths.shape == (len(candidates), ), (candidate_strengths.shape, (len(candidates), ))
     if candidate_positions is not None:

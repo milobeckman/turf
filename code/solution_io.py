@@ -35,7 +35,45 @@ def read_solution(filename):
             step_no = state["step_no"]
 
     return candidate_positions, candidate_strengths, voter_positions, error, step_no
-  
+
+def read_latest_positions(filename):
+    positions_filename = filename[:-4] + "_positions.txt"
+    
+    # read whatever data exists from file
+    if not os.path.exists(positions_filename):
+        return None, None, None, None, 0
+    
+    position_lines = [x.strip() for x in open(positions_filename).readlines()]
+    header = position_lines[0]
+    latest = position_lines[-1]
+    
+    header_cols = header.split("\t")
+    latest_data = [float(x) for x in latest.split("\t")]
+    
+    candidate_strengths = []
+    candidate_positions = []
+    voter_positions = []
+    error = None
+    step_no = len(position_lines)-1
+    
+    col = 0
+    
+    # parsing candidate (x,y)s
+    while (header_cols[col][-2:] != "_s"):
+        candidate_positions += [[latest_data[col], latest_data[col+1]]]
+        col += 2
+    
+    # parsing candidate strengths
+    while (header_cols[col][-2:] == "_s"):
+        candidate_strengths += [latest_data[col]]
+        col += 1
+    
+    # parsing county (x,y)s
+    while (col < len(header_cols)):
+        voter_positions += [[latest_data[col], latest_data[col+1]]]
+        col += 2
+    
+    return np.array(candidate_positions), np.array(candidate_strengths), np.array(voter_positions), error, step_no
 
 # write probabilities to filename
 def write_probabilities(filename, prior_vector, probability_vector, step_no):

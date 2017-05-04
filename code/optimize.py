@@ -18,6 +18,12 @@ from config import config
 import solution_io
 import visualize
 
+nCOUNTY_ERRORS = 0
+MAX_COUNTY_ERRORS = 1000 # CHANGE THIS
+MIN_ACC_RATE = 0.1
+MAX_ACC_RATE = 0.6
+
+
 
 ## IMPLEMENTATIONS
 
@@ -56,9 +62,19 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
 
     print("Initial posterior:", posterior)
 
+    # this will be updated to True if (a) nCOUNTY_ERRORS exceeds MAX_COUNTY_ERRORS or (b) acceptance rate is below MIN_ACC_RATE after 100+ attempted steps
+    bad_parameters = False
+
     # iteratively perturb candidates (outer loop) and optimize counties (inner loop), accept perturbation according to metropolis-hastings
     try:
-        while step_no < config.num_iterations:
+        while step_no < config.num_iterations and not bad_parameters:
+            
+            if nCOUNTY_ERRORS > MAX_COUNTY_ERRORS:
+                bad_parameters = True
+            
+            if steps_attempted > 100 and (steps_taken < steps_attempted*MIN_ACC_RATE or steps_taken > steps_attempted*MAX_ACC_RATE):
+                bad_parameters = True
+            
         # for i in range(config.num_iterations):
             
             # step_no is distinct from i because it is preserved across multiple runs of the same optimization process
@@ -424,6 +440,8 @@ def find_minimal_error_position_for_single_county(candidate_strengths, candidate
     # use scipy function leastsq to minimize error
     result = leastsq(compute_error_components_for_single_county_leastsq_helper_version, old_county_position, args=args, full_output=True)
     if result[4] not in (1, 2, 3, 4):
+        global nCOUNTY_ERRORS
+        nCOUNTY_ERRORS += 1
         print("Couldn't find county position:", result[3])
     return result[0]
 

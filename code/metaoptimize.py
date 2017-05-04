@@ -22,7 +22,8 @@ def main():
     choices["prior-county-spread-stddev"] = [0.025,0.25,2.5]
     
     # prepare the recursive call to list_of_run_commands and generate list
-    run_command_so_far = "python main.py -d " + data_file + " -s " + solution_file + " -n " + str(num_iter) + " --plot-all-counties " + viz_file + " --" + method + " --save-latest"
+    run_command_so_far = "python main.py -d " + data_file + " -s " + solution_file + " -n " + str(num_iter)
+    run_command_so_far += " --plot-all-counties " + viz_file + " --" + method + " --save-latest"
     identifier_so_far = ""
     command_list = list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far)
     
