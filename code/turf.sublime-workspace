@@ -280,10 +280,20 @@
 	"buffers":
 	[
 		{
+			"file": "config.py",
+			"settings":
+			{
+				"buffer_size": 11395,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "main.py",
 			"settings":
 			{
-				"buffer_size": 5672,
+				"buffer_size": 5780,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -291,18 +301,52 @@
 			"file": "optimize.py",
 			"settings":
 			{
-				"buffer_size": 30875,
+				"buffer_size": 31204,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "config.py",
+			"file": "metaoptimize.py",
 			"settings":
 			{
-				"buffer_size": 11045,
+				"buffer_size": 2670,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "import subprocess, shlex, os\n\n\ndef main():\n    \n    data_file = \"data/test_case_2.txt\"\n    method = \"mcmc-posterior-max\"\n    num_iter = 10000\n    seed_no = 1\n    \n    # an identifier for this particular run (e.g. 00120) will be inserted in place of %I (e.g. test_case_2_v00120.txt)\n    solution_file = \"solutions/test_case_2_v%I.txt\"\n    viz_file = \"images/test_case_2_viz_v%I.png\"\n    \n    # the hyperparameter choices to grid search through\n    hyperparameters = [\"perturb-strength-stddev\",\"perturb-position-stddev\",\"prior-strength-stddev\",\"prior-location-stddev\",\"prior-county-spread-stddev\"]\n    choices = dict.fromkeys(hyperparameters)\n    \n    choices[\"perturb-strength-stddev\"] = [0.1,0.5,1.0]\n    choices[\"perturb-position-stddev\"] = [0.25,1.0,5.0]\n    choices[\"prior-strength-stddev\"] = [0.1,0.25,0.5]\n    choices[\"prior-location-stddev\"] = [0.5,2.0,5.0]\n    choices[\"prior-county-spread-stddev\"] = [0.025,0.25,2.5]\n    \n    # prepare the recursive call to list_of_run_commands and generate list\n    run_command_so_far = ' '.join([\"python main.py\",\"-d\", data_file,\n                                     '-s',solution_file,\n                                     '-n',str(num_iter),\n                                     '--plot-all-counties',viz_file,\n                                     '--'+method,\n                                     '--set-seed',str(seed_no),\n                                     '--write-every-step',\n                                     '--plot-probabilities',\n                                     '--plot-positions'])\n    identifier_so_far = \"\"\n    command_list = list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far)\n    \n    # run commands in parallel\n    run_in_parallel(command_list, 32)\n  \n\n\n# recursively generates a list of all combinations of hyperparameters\ndef list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far):\n    \n    # base case: sub in the identifier and run\n    if len(hyperparameters) == 0:\n        run_command = run_command_so_far.replace(\"%I\", identifier_so_far)\n        return [run_command]\n    \n    # choose the hyperparameter to iterate over\n    my_hp = hyperparameters[0]\n    identifier_index = 0\n    run_command_so_far += \" --\" + my_hp + \" \"\n    \n    command_list = []\n    \n    # call grid_search for each choice of hyperparameter\n    for choice in choices[my_hp]:\n        command_list += list_of_run_commands(hyperparameters[1:], choices, run_command_so_far + str(choice), identifier_so_far + str(identifier_index))\n        identifier_index += 1\n\n    return command_list\n\n\n# run the list of commands in parallel, no more than max_processes at a time\ndef run_in_parallel(command_list, max_processes):\n    \n    processes = set()\n    \n    for command in command_list:\n        processes.add(subprocess.Popen(shlex.split(command)))\n        if len(processes) >= max_processes:\n            os.wait()\n            processes.difference_update([p for p in processes if p.poll() is not None])\n    \n\n\nif __name__ == '__main__':\n    main()\n",
+			"settings":
+			{
+				"buffer_size": 3050,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "solution_io.py",
+			"settings":
+			{
+				"buffer_size": 4665,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "visualize.py",
+			"settings":
+			{
+				"buffer_size": 9401,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 17 files for \"Couldn't find county position: Number of calls to function has reached maxfev\"\n\n0 matches\n\nSearching 17 files for \"Couldn't find county position\"\n\n/Users/anders/Documents/turf/code/optimize.py:\n  420      result = leastsq(compute_error_components_for_single_county_leastsq_helper_version, old_county_position, args=args, full_output=True)\n  421      if result[4] not in (1, 2, 3, 4):\n  422:         print(\"Couldn't find county position:\", result[3])\n  423      return result[0]\n  424  \n\n1 match in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 529,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		}
 	],
@@ -420,6 +464,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"solution_file",
+			"prior_location",
+			"Couldn't find county position",
+			"Couldn't find county position: Number of calls to function has reached maxfev",
 			"...\"",
 			"function In(",
 			"then fun",
@@ -543,11 +591,7 @@
 			"getCurrentState",
 			"setProjection",
 			"get",
-			"getEmbeddingInfoByName",
-			"get",
-			"DataPanelPolymer",
-			"ProjectionsPanelPolymer",
-			"showcluster"
+			"getEmbeddingInfoByName"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -580,24 +624,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "main.py",
+					"file": "config.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5672,
+						"buffer_size": 11395,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								224,
-								224
+								5176,
+								5168
 							]
 						],
 						"settings":
@@ -608,7 +652,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 146.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -616,19 +660,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "optimize.py",
+					"file": "main.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 30875,
+						"buffer_size": 5780,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								27233,
-								27233
+								5576,
+								5594
 							]
 						],
 						"settings":
@@ -639,27 +683,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7343.0,
+						"translation.y": 1030.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "config.py",
+					"file": "optimize.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11045,
+						"buffer_size": 31204,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5350,
-								5350
+								5618,
+								5611
 							]
 						],
 						"settings":
@@ -669,11 +713,179 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 112.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 1332.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "metaoptimize.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2670,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1706,
+								1706
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3050,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3050,
+								3050
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 290.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "solution_io.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1232,
+								1251
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "visualize.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9401,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4740,
+								4758
+							]
+						],
+						"settings":
+						{
+							"git_gutter_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1622.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 529,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										430,
+										459
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								115,
+								115
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 2,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 45.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
