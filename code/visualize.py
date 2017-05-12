@@ -18,6 +18,8 @@ import optimize
 
 ## I haven't really touched this code since Felix wrote it...
 
+
+
 def plot_individual_counties(candidates, counties, candidate_strengths, candidate_positions, county_positions, actual_votes):
     fig_wh = math.ceil(len(county_positions) ** 0.5)
 
@@ -253,5 +255,4 @@ def plot_positions(filename):
         ax5.set_xlabel(r'$S$',fontsize=40)
 
     fig.savefig(figname, transparent=True, dpi=300, bbox_inches='tight')
-
 
