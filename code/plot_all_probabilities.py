@@ -17,6 +17,7 @@ def main():
     
     for filename in files_to_plot:
         visualize.plot_probabilities(filename)
+        visualize.plot_positions(filename)
     
 
 if __name__ == '__main__':

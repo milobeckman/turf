@@ -20,7 +20,7 @@ def main():
     choices["perturb-position-stddev"] = [0.25,1.0,5.0]
     choices["prior-strength-stddev"] = [0.1,0.25,0.5]
     choices["prior-location-stddev"] = [1.0,2.0,5.0]
-    choices["prior-county-spread-stddev"] = [0.025,0.25,2.5]
+    choices["prior-county-spread-stddev"] = [0.1,0.25,1]
     
     # prepare the recursive call to list_of_run_commands and generate list
 
@@ -32,9 +32,7 @@ def main():
                                     '--'+method,
                                     '--save-latest',
                                     '--set-seed',str(seed_no),
-                                    '--write-every-step',
-                                    '--plot-probabilities',
-                                    '--plot-positions'])
+                                    '--write-every-step'])
     identifier_so_far = ""
     command_list = list_of_run_commands(hyperparameters, choices, run_command_so_far, identifier_so_far)
     
@@ -58,7 +56,7 @@ def list_of_run_commands(hyperparameters, choices, run_command_so_far, identifie
     
     command_list = []
     
-    # call grid_search for each choice of hyperparameter
+    # call list_of_run_commands for each choice of hyperparameter
     for choice in choices[my_hp]:
         command_list += list_of_run_commands(hyperparameters[1:], choices, run_command_so_far + str(choice), identifier_so_far + str(identifier_index))
         identifier_index += 1

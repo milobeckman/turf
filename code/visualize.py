@@ -141,7 +141,7 @@ def plot_all_counties(candidates, counties, candidate_strengths, candidate_posit
 def plot_probabilities(filename):
 
     filename = filename.replace('.txt','_probabilities.txt')
-    figname = filename.replace('.txt','_probabilities.pdf')
+    figname = filename.replace('.txt','.pdf')
     df = pd.read_table(filename)
     nsteps = len(df)
     magnitude = int(np.log10(nsteps))
@@ -170,7 +170,7 @@ def plot_probabilities(filename):
 def plot_positions(filename):
 
     filename = filename.replace('.txt','_positions.txt')
-    figname = filename.replace('.txt','_positions.pdf')
+    figname = filename.replace('.txt','.pdf')
 
     df = pd.read_table(filename)
     nsteps = len(df)

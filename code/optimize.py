@@ -19,7 +19,7 @@ import solution_io
 import visualize
 
 nCOUNTY_ERRORS = 0
-MAX_COUNTY_ERRORS = 1000 # CHANGE THIS
+MAX_COUNTY_ERRORS = 50000 # CHANGE THIS
 MIN_ACC_RATE = 0.1
 MAX_ACC_RATE = 0.6
 
@@ -72,7 +72,7 @@ def optimize_mcmc_posterior_max(actual_votes, candidate_strengths=None, candidat
             if nCOUNTY_ERRORS > MAX_COUNTY_ERRORS:
                 bad_parameters = True
             
-            if steps_attempted > 100 and (steps_taken < steps_attempted*MIN_ACC_RATE or steps_taken > steps_attempted*MAX_ACC_RATE):
+            if steps_attempted > 2000 and (steps_taken < steps_attempted*MIN_ACC_RATE or steps_taken > steps_attempted*MAX_ACC_RATE):
                 bad_parameters = True
             
         # for i in range(config.num_iterations):
